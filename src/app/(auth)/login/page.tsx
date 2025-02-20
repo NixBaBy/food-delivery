@@ -7,7 +7,7 @@ import React from "react";
 const Page = () => {
   return (
     <div className="flex flex-col gap-6 w-[416px]">
-      <Link href="register">
+      <Link href="sign-up">
         <ChevronLeft color="#18181B" />
       </Link>
       <div>
