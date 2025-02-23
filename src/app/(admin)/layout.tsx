@@ -1,10 +1,15 @@
 import React, { ReactNode } from "react";
-import Header from "../(main)/components/Header";
+import Sidebar from "./admin/components/Sidebar";
 type Props = {
   children: ReactNode;
 };
 const Authlayout = (props: Props) => {
-  return <div>{props.children}</div>;
+  return (
+    <div>
+      <Sidebar />
+      {props.children}
+    </div>
+  );
 };
 
 export default Authlayout;

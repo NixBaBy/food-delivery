@@ -75,7 +75,7 @@ const FirstStep = ({
       </Form>
       <div className="flex gap-3">
         <p className="text-[#71717A] text-4">Already have an account?</p>
-        <a href="#" className="text-[#2563EB] text-4">
+        <a href="/login" className="text-[#2563EB] text-4">
           Log in
         </a>
       </div>

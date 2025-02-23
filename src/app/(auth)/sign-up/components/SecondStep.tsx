@@ -53,7 +53,7 @@ const SecondStep = ({
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    router.push("/");
+    router.push("/login");
   }
   return (
     <div className="flex flex-col gap-6 w-[480px]">
@@ -107,7 +107,7 @@ const SecondStep = ({
       </Form>
       <div className="flex gap-3">
         <p className="text-[#71717A] text-4">Already have an account?</p>
-        <a href="#" className="text-[#2563EB] text-4">
+        <a href="login" className="text-[#2563EB] text-4">
           Log in
         </a>
       </div>

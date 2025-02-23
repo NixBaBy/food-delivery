@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ["res.cloudinary.com"],
+    domains: ["res.cloudinary.com", "s3-alpha-sig.figma.com"], // Энд s3-alpha-sig.figma.com домэйнийг нэмж оруулна
   },
 };
 

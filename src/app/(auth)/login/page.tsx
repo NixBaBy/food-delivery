@@ -38,7 +38,7 @@ const Page = () => {
       </Link>
       <div className="flex gap-3">
         <p className="text-[#71717A] text-4">Don’t have an account?</p>
-        <a href="#" className="text-[#2563EB] text-4">
+        <a href="sign-up" className="text-[#2563EB] text-4">
           Sign Up
         </a>
       </div>

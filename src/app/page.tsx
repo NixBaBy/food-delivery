@@ -1,7 +1,8 @@
 import Image from "next/image";
 import CloudinaryUpload from "./(admin)/admin/components/CloudinaryUpload";
 import Authlayout from "./(main)/layout";
-import Categorys from "@/components/Categorys";
+import Categorys from "@/app/(main)/components/Categorys";
+import Foods from "@/app/(main)/components/Foods";
 
 export default function Home() {
   return (
