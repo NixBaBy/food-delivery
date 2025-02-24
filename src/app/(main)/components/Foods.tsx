@@ -1,6 +1,3 @@
-"use client";
-import Image from "next/image";
-import React, { useEffect, useState } from "react";
 type Food = {
   foodName: string;
   price: number;
@@ -9,20 +6,13 @@ type Food = {
   category: number;
   id: number;
 };
-const Foods = () => {
-  const [foodData, setFoodData] = useState<Food[]>([]);
-  useEffect(() => {
-    const getData = async () => {
-      const res = await fetch(`http://localhost:8080/api/foods`);
-      const data = await res.json();
-      setFoodData(data);
-      console.log(data);
-    };
-    getData();
-  }, []);
+const Foods = async () => {
+  const res = await fetch(`http://localhost:8080/api/foods/1`);
+  const data = await res.json();
+
   return (
     <div className="flex gap-5 flex-wrap w-[1264px] m-auto">
-      {foodData.map((food) => {
+      {data?.map((food: Food) => {
         return (
           <div
             key={food.id}
