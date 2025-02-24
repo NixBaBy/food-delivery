@@ -40,7 +40,7 @@ const Sidebar = () => {
             className="flex gap-[10px] items-center px-6 py-2 w-full"
           >
             <Truck />
-            <p className=" text-[14px] font-bold">Orders</p>
+            <p className=" text-[14px] font-bold w-[70px]">Orders</p>
           </ToggleGroupItem>
         </Link>
         <ToggleGroupItem

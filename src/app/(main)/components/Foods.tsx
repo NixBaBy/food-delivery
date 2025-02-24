@@ -7,7 +7,7 @@ type Food = {
   id: number;
 };
 const Foods = async () => {
-  const res = await fetch(`http://localhost:8080/api/foods/1`);
+  const res = await fetch(`http://localhost:8080/api/foods`);
   const data = await res.json();
 
   return (
