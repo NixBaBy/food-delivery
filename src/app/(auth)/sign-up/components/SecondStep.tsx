@@ -52,7 +52,7 @@ const SecondStep = ({
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit() {
     router.push("/login");
   }
   return (

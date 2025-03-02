@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/carousel";
 
 type Category = {
-  id: number;
+  _id: number;
   categoryName: string;
 };
 
@@ -20,9 +20,9 @@ const Categorys = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const res = await fetch(`http://localhost:8080/api/categories`);
+      const res = await fetch(`http://localhost:8080/food-category`);
       const data = await res.json();
-      setCategories(data);
+      setCategories(data.getCagegory);
     };
     getData();
   }, []);
@@ -35,13 +35,11 @@ const Categorys = () => {
         </h2>
         <Carousel>
           <CarouselContent className="flex gap-2">
-            {categories.map((category) => (
+            {categories?.map((category) => (
               <CarouselItem
-                key={category.id}
+                key={category._id}
                 className="flex-shrink-0 w-[200px]"
               >
-                {" "}
-                {/* Тохируулсан хэмжээ */}
                 <button className="py-1 px-5 bg-white rounded-full">
                   {category.categoryName}
                 </button>

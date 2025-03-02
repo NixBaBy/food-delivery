@@ -4,12 +4,12 @@ type Food = {
   image: string;
   ingredients: string;
   category: number;
-  id: number;
+  _id: number;
 };
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -19,9 +19,9 @@ const Foods = () => {
   const [foods, setFoods] = useState<Food[]>([]);
   useEffect(() => {
     const getData = async () => {
-      const res = await fetch(`http://localhost:8080/api/foods`);
+      const res = await fetch(`http://localhost:8080/foods`);
       const data = await res.json();
-      setFoods(data);
+      setFoods(data.newFood);
     };
     getData();
   }, []);
@@ -31,7 +31,7 @@ const Foods = () => {
       {foods?.map((food: Food) => {
         return (
           <div
-            key={food.id}
+            key={food._id}
             className="w-[397px] h-[342px] rounded-[20px] bg-[#FFFFFF] p-4 "
           >
             <div
@@ -46,24 +46,45 @@ const Foods = () => {
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle></DialogTitle>
-                    <DialogDescription
-                      ref={null}
-                      className="text-sm text-muted-foreground w-826px h-[412px] p-6 flex gap-6 rounded-[20px]"
-                    >
-                      <div className="flex gap-6">
-                        <img
-                          src={food.image}
-                          className="w-full h-full rounded-xl"
-                        />
+                    <DialogTitle className="text-red-500 text-xl font-bold"></DialogTitle>
+                    <div className="text-sm text-muted-foreground flex gap-6">
+                      <img
+                        src={food.image}
+                        className="w-[377px] h-[364px] rounded-xl"
+                      />
+                      <div className="flex flex-col justify-between">
                         <div className="flex flex-col gap-3">
-                          <p className="text-red-500 text-[24px] font-bold tracking-[-0.6px]">
+                          <div className="text-red-500 text-lg font-bold">
                             {food.foodName}
-                          </p>
-                          <p className="text-[14px]">{food.ingredients}</p>
+                          </div>
+                          <p className="text-sm">{food.ingredients}</p>
+                        </div>
+                        <div className="flex flex-col gap-6">
+                          <div className="flex justify-between items-center">
+                            <div>
+                              <p className="text-[16px] text-[#09090B]">
+                                Total Price
+                              </p>
+                              <p className="text-[24px] font-bold tracking-[-0.6px] text-[#09090B]">
+                                ${food.price}
+                              </p>
+                            </div>
+                            <div className="flex items-center gap-3">
+                              <div className="w-[44px] h-[44px] rounded-full py-2 px-4 flex items-center justify-center border-[1px] border-solid border-[#E4E4E7]">
+                                -
+                              </div>
+                              <p className="text-[#09090B] text-[18px] font-bold">
+                                1
+                              </p>
+                              <div className="w-[44px] h-[44px] rounded-full py-2 px-4 flex items-center justify-center border-[1px] border-solid border-[#E4E4E7]">
+                                +
+                              </div>
+                            </div>
+                          </div>
+                          <Button className="w-full">Add to cart</Button>
                         </div>
                       </div>
-                    </DialogDescription>
+                    </div>
                   </DialogHeader>
                 </DialogContent>
               </Dialog>
