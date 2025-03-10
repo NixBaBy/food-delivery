@@ -49,22 +49,17 @@ const Header = () => {
                   <ShoppingCart />
                   Order detail
                 </SheetTitle>
-                <SheetDescription>
-                  <Tabs defaultValue="account" className="w-[400px]">
-                    <TabsList>
-                      <TabsTrigger value="cart">Cart</TabsTrigger>
-                      <TabsTrigger value="order">Order</TabsTrigger>
-                    </TabsList>
-                    <TabsContent value="cart">
-                      <div>
-                        <p>My Cart</p>
-                      </div>
-                    </TabsContent>
-                    <TabsContent value="order">
-                      Change your password here.
-                    </TabsContent>
-                  </Tabs>
-                </SheetDescription>
+
+                <Tabs defaultValue="account" className="w-[400px]">
+                  <TabsList>
+                    <TabsTrigger value="cart">Cart</TabsTrigger>
+                    <TabsTrigger value="order">Order</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="cart">My Cart</TabsContent>
+                  <TabsContent value="order">
+                    Change your password here.
+                  </TabsContent>
+                </Tabs>
               </SheetHeader>
             </SheetContent>
           </Sheet>

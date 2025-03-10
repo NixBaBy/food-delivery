@@ -44,7 +44,7 @@ const Foods = () => {
                     +
                   </div>
                 </DialogTrigger>
-                <DialogContent>
+                <DialogContent className="">
                   <DialogHeader>
                     <DialogTitle className="text-red-500 text-xl font-bold"></DialogTitle>
                     <div className="text-sm text-muted-foreground flex gap-6">
