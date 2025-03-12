@@ -50,12 +50,14 @@ const Header = () => {
                   Order detail
                 </SheetTitle>
 
-                <Tabs defaultValue="account" className="w-[400px]">
+                <Tabs defaultValue="account">
                   <TabsList>
                     <TabsTrigger value="cart">Cart</TabsTrigger>
                     <TabsTrigger value="order">Order</TabsTrigger>
                   </TabsList>
-                  <TabsContent value="cart">My Cart</TabsContent>
+                  <TabsContent value="cart">
+                    <div className="w-[439px] h-[508px] p-4 rounded-[20px] "></div>
+                  </TabsContent>
                   <TabsContent value="order">
                     Change your password here.
                   </TabsContent>

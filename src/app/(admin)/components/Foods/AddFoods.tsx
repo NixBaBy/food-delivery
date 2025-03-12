@@ -2,6 +2,28 @@
 
 import React, { useEffect, useState } from "react";
 import FoodsDialog from "./FoodsDialog";
+import { Pencil, Trash2 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
 type Category = {
   _id: string;
@@ -18,6 +40,8 @@ type Food = {
 
 const Foods = ({ categories }: { categories: Category[] }) => {
   const [foods, setFoods] = useState<Food[]>([]);
+  const [foodId, setFoodId] = useState<string>("");
+
   const getData = async () => {
     const res = await fetch(`http://localhost:8080/foods`);
     const data = await res.json();
@@ -26,6 +50,73 @@ const Foods = ({ categories }: { categories: Category[] }) => {
   useEffect(() => {
     getData();
   }, []);
+
+  const deleteFood = async (foodId: string) => {
+    try {
+      const response = await fetch(`http://localhost:8080/foods/${foodId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log(response);
+    } catch (error) {
+      console.log("error", error);
+      alert("aldaa garlaa");
+    }
+    alert("amjilttai ustglaa");
+    getData();
+  };
+
+  const editCategory = async (
+    ingredients: string,
+    foodName: string,
+    price: string,
+    foodId: string
+  ) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/food-category/${foodId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ingredients, foodName, price }),
+        }
+      );
+      console.log(response);
+    } catch (error) {
+      console.log("error", error);
+      alert("aldaa garlaa");
+    }
+    getData();
+  };
+
+  const FormSchema = z.object({
+    foodName: z.string().min(2, {
+      message: "ner 2usegnees deesh baina",
+    }),
+    foodPrice: z.string().min(1, {
+      message: "une 1ees ih baina",
+    }),
+    Ingredients: z.string().min(5, {
+      message: "tailbat dor hayj 5useg",
+    }),
+  });
+
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      foodName: "",
+      foodPrice: "",
+      Ingredients: "",
+    },
+  });
+
+  function onSubmit(values: z.infer<typeof FormSchema>) {
+    editCategory(values.Ingredients, values.foodName, values.foodPrice, foodId);
+  }
 
   return (
     <div className="flex  gap-4  flex-col  mt-5">
@@ -48,11 +139,133 @@ const Foods = ({ categories }: { categories: Category[] }) => {
                       key={filteredFood._id}
                       className="flex flex-col gap-5 p-4 rounded-[20px] border-solid border-[1px] border-[#E4E4E7] bg-[#FFF] w-[270px] "
                     >
-                      <img
-                        src={filteredFood.image}
-                        alt=""
-                        className=" rounded-xl w-[100%] h-[129px] object-cover"
-                      />
+                      <div className="relative">
+                        <img
+                          src={filteredFood.image}
+                          alt=""
+                          className=" rounded-xl w-[100%] h-[129px] object-cover"
+                        />
+                        <Dialog>
+                          <DialogTrigger
+                            className="w-11 h-11 py-2 px-4 flex justify-center items-center absolute bottom-4 right-4 bg-white rounded-full"
+                            onClick={() => {
+                              form.setValue("foodName", filteredFood.foodName);
+                              form.setValue(
+                                "foodPrice",
+                                String(filteredFood.price)
+                              );
+                              form.setValue(
+                                "Ingredients",
+                                filteredFood.ingredients
+                              );
+                            }}
+                          >
+                            <Pencil color="#ff0000" width={16} height={16} />
+                          </DialogTrigger>
+
+                          <DialogContent className="w-[472px] p-6">
+                            <DialogHeader>
+                              <DialogTitle>Dishes info</DialogTitle>
+                              <Form {...form}>
+                                <form onSubmit={form.handleSubmit(onSubmit)}>
+                                  <div className="flex flex-col gap-3">
+                                    <div className="flex justify-between mt-3">
+                                      <p className="text-[#71717A] text-[12px]">
+                                        Food Name
+                                      </p>
+                                      <FormField
+                                        control={form.control}
+                                        name="foodName"
+                                        render={({ field }) => (
+                                          <FormItem>
+                                            <FormControl>
+                                              <Input
+                                                placeholder="Food Name"
+                                                {...field}
+                                                className="w-[288px] "
+                                              />
+                                            </FormControl>
+                                            <FormMessage />
+                                          </FormItem>
+                                        )}
+                                      />
+                                    </div>
+                                    <div className="flex justify-between mt-3">
+                                      <p className="text-[#71717A] text-[12px]">
+                                        Ingredients
+                                      </p>
+                                      <FormField
+                                        control={form.control}
+                                        name="Ingredients"
+                                        render={({ field }) => (
+                                          <FormItem>
+                                            <FormControl>
+                                              <Input
+                                                placeholder="tailbar"
+                                                {...field}
+                                                className="w-[288px] min-h-[80px]"
+                                              />
+                                            </FormControl>
+                                            <FormMessage />
+                                          </FormItem>
+                                        )}
+                                      />
+                                    </div>
+
+                                    <div className="flex justify-between mt-3">
+                                      <p className="text-[#71717A] text-[12px]">
+                                        Price
+                                      </p>
+                                      <FormField
+                                        control={form.control}
+                                        name="foodPrice"
+                                        render={({ field }) => (
+                                          <FormItem>
+                                            <FormControl>
+                                              <Input
+                                                type="number"
+                                                placeholder="Food Price"
+                                                {...field}
+                                                className="w-[288px]"
+                                              />
+                                            </FormControl>
+                                            <FormMessage />
+                                          </FormItem>
+                                        )}
+                                      />
+                                    </div>
+                                    <div className="flex justify-between pt-6 items-center">
+                                      <Button
+                                        type="submit"
+                                        className="h-[40px] py-2 px-4 bg-transparent border-[1px] border-solid border-[#EF4444]"
+                                        onClick={() =>
+                                          deleteFood(filteredFood._id)
+                                        }
+                                      >
+                                        <Trash2
+                                          color="#ff0000"
+                                          width={16}
+                                          height={16}
+                                          onClick={() =>
+                                            setFoodId(filteredFood._id)
+                                          }
+                                        />
+                                      </Button>
+
+                                      <Button
+                                        type="submit"
+                                        className="h-[40px] py-2 px-4 "
+                                      >
+                                        Save changes
+                                      </Button>
+                                    </div>
+                                  </div>
+                                </form>
+                              </Form>
+                            </DialogHeader>
+                          </DialogContent>
+                        </Dialog>
+                      </div>
                       <div className="flex flex-col gap-2">
                         <div className="flex justify-between">
                           <p className="text-bold text-[14px] text-[#EF4444]">
