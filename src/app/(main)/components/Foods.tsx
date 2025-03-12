@@ -3,8 +3,8 @@ type Food = {
   price: number;
   image: string;
   ingredients: string;
-  category: number;
-  _id: number;
+  category: string;
+  _id: string;
 };
 import { Button } from "@/components/ui/button";
 import {
@@ -29,6 +29,7 @@ const Foods = () => {
   return (
     <div className="flex gap-5 flex-wrap w-[1264px] m-auto">
       {foods?.map((food: Food) => {
+        console.log(food.image);
         return (
           <div
             key={food._id}
