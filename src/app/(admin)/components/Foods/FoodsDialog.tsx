@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent, useState } from "react";
 import CloudinaryUpload from "../CloudinaryUpload";
 import {
   Dialog,
@@ -36,6 +36,21 @@ const FormSchema = z.object({
 });
 
 const FoodsDialog = ({ getData, id }: { getData: () => void; id: string }) => {
+  const [file, setFile] = useState<File | null>(null);
+  const [image, setImage] = useState<string>("");
+
+  const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) {
+      return;
+    }
+    const files = e.target.files[0];
+    if (files) {
+      setFile(files);
+      const tempImageUrl = URL.createObjectURL(files);
+      setImage(tempImageUrl);
+    }
+  };
+
   const createFood = async (values: z.infer<typeof FormSchema>) => {
     try {
       const response = await fetch("http://localhost:8080/foods", {
@@ -163,11 +178,14 @@ const FoodsDialog = ({ getData, id }: { getData: () => void; id: string }) => {
                 <FormField
                   control={form.control}
                   name="img"
-                  render={({ field }) => (
+                  render={({ field: { onChange, value, ...rest } }) => (
                     <FormItem>
                       <FormLabel>Food image</FormLabel>
                       <FormControl>
-                        <CloudinaryUpload />
+                        <CloudinaryUpload
+                          handleFile={handleFile}
+                          field={field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

@@ -20,21 +20,31 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 type Category = {
   _id: string;
   categoryName: string;
+  createdAt: Date;
+  updatedAt: Date;
+  __v: number;
 };
 type Food = {
   foodName: string;
   price: number;
   image: string;
   ingredients: string;
-  category?: string;
+  category?: Category;
   _id?: string | any;
 };
 
@@ -72,19 +82,17 @@ const Foods = ({ categories }: { categories: Category[] }) => {
     ingredients: string,
     foodName: string,
     price: string,
+    category: string,
     foodId: string
   ) => {
     try {
-      const response = await fetch(
-        `http://localhost:8080/food-category/${foodId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ ingredients, foodName, price }),
-        }
-      );
+      const response = await fetch(`http://localhost:8080/foods/${foodId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ingredients, foodName, price, category }),
+      });
       console.log(response);
     } catch (error) {
       console.log("error", error);
@@ -103,6 +111,9 @@ const Foods = ({ categories }: { categories: Category[] }) => {
     Ingredients: z.string().min(5, {
       message: "tailbat dor hayj 5useg",
     }),
+    category: z.string().min(1, {
+      message: "Please select a category",
+    }),
   });
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -111,13 +122,20 @@ const Foods = ({ categories }: { categories: Category[] }) => {
       foodName: "",
       foodPrice: "",
       Ingredients: "",
+      category: "",
     },
   });
 
   function onSubmit(values: z.infer<typeof FormSchema>) {
-    editCategory(values.Ingredients, values.foodName, values.foodPrice, foodId);
+    console.log("food!+", foodId);
+    editCategory(
+      values.Ingredients,
+      values.foodName,
+      values.foodPrice,
+      values.category,
+      foodId
+    );
   }
-
   return (
     <div className="flex  gap-4  flex-col  mt-5">
       <div>
@@ -133,7 +151,7 @@ const Foods = ({ categories }: { categories: Category[] }) => {
               <div className="flex flex-wrap gap-4">
                 <FoodsDialog getData={getData} id={category._id} />
                 {foods
-                  .filter((food) => food.category === category._id)
+                  .filter((food) => food.category?._id === category._id)
                   .map((filteredFood) => (
                     <div
                       key={filteredFood._id}
@@ -158,6 +176,7 @@ const Foods = ({ categories }: { categories: Category[] }) => {
                                 "Ingredients",
                                 filteredFood.ingredients
                               );
+                              setFoodId(filteredFood._id);
                             }}
                           >
                             <Pencil color="#ff0000" width={16} height={16} />
@@ -185,6 +204,37 @@ const Foods = ({ categories }: { categories: Category[] }) => {
                                                 className="w-[288px] "
                                               />
                                             </FormControl>
+                                            <FormMessage />
+                                          </FormItem>
+                                        )}
+                                      />
+                                    </div>
+                                    <div className="flex justify-between mt-3">
+                                      <p className="text-[#71717A] text-[12px]">
+                                        Dish Category
+                                      </p>
+                                      <FormField
+                                        control={form.control}
+                                        name="category"
+                                        render={({ field }) => (
+                                          <FormItem>
+                                            <Select
+                                              onValueChange={field.onChange}
+                                            >
+                                              <SelectTrigger className="w-[288px]">
+                                                <SelectValue placeholder="Choose Category" />
+                                              </SelectTrigger>
+                                              <SelectContent>
+                                                {categories?.map((category) => (
+                                                  <SelectItem
+                                                    key={category._id}
+                                                    value={category._id}
+                                                  >
+                                                    {category.categoryName}
+                                                  </SelectItem>
+                                                ))}
+                                              </SelectContent>
+                                            </Select>
                                             <FormMessage />
                                           </FormItem>
                                         )}
@@ -246,9 +296,6 @@ const Foods = ({ categories }: { categories: Category[] }) => {
                                           color="#ff0000"
                                           width={16}
                                           height={16}
-                                          onClick={() =>
-                                            setFoodId(filteredFood._id)
-                                          }
                                         />
                                       </Button>
 

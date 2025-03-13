@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ChevronLeft } from "lucide-react";
-import React from "react";
+import React, { Dispatch } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -17,12 +17,31 @@ import { useRouter } from "next/navigation";
 const SecondStep = ({
   setCurrentStep,
   currentStep,
+  user,
+  setUser,
 }: {
+  setUser: Dispatch<string>;
+  user: string;
   setCurrentStep: any;
   currentStep: number;
 }) => {
-  const router = useRouter();
+  const createUser = async (password: string, user: string) => {
+    try {
+      const response = await fetch("http://localhost:8080/sign-up", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user, password }),
+      });
+      console.log(response);
+    } catch (error) {
+      console.log("error", error);
+      alert("aldaa garlaa");
+    }
+  };
 
+  const router = useRouter();
   const formSchema = z
     .object({
       password: z
@@ -52,7 +71,8 @@ const SecondStep = ({
     },
   });
 
-  function onSubmit() {
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    createUser(values.password, user);
     router.push("/login");
   }
   return (

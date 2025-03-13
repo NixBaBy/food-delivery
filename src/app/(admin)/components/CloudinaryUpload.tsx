@@ -2,25 +2,27 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import React, { ChangeEvent, useState } from "react";
+import { ControllerRenderProps } from "react-hook-form";
 
-const CloudinaryUpload = () => {
-  const [file, setFile] = useState<File | null>(null);
-  const [image, setImage] = useState(null);
-
+const CloudinaryUpload = ({
+  handleFile,
+  field,
+}: {
+  handleFile: (e: ChangeEvent<HTMLInputElement>) => void;
+  field: ControllerRenderProps<
+    {
+      foodName: string;
+      foodPrice: string;
+      Ingredients: string;
+      img: string;
+    },
+    "img"
+  >;
+}) => {
   const PRESENT_NAME = "food-delivery";
   const CLOUDINARY_NAME = "728498412411343";
 
-  const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) {
-      return;
-    }
-    const files = e.target.files[0];
-    if (files) {
-      setFile(files);
-    }
-  };
-
-  const handleUpload = async () => {
+  const handleUpload = async (file: File | null) => {
     if (!file) {
       alert("PLease Select a File");
       return;
@@ -39,8 +41,8 @@ const CloudinaryUpload = () => {
           body: formData,
         }
       );
-      const data = await res.json();
-      setImage(data.secure_url);
+      const result = await res.json();
+      return result.secure_url;
     } catch (err) {
       console.log(err);
       alert("failed to upload file");
@@ -50,7 +52,6 @@ const CloudinaryUpload = () => {
   return (
     <div className="flex flex-col">
       <input type="file" onChange={handleFile} />
-      <Button onClick={handleUpload}>Upload</Button>
       {image && (
         <div>
           <Image src={image} alt="uploaded Photo" width={300} height={300} />

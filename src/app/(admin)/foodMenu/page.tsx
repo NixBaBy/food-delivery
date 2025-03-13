@@ -3,6 +3,9 @@ import React, { useEffect, useState } from "react";
 type Category = {
   _id: string;
   categoryName: string;
+  createdAt: Date;
+  updatedAt: Date;
+  __v: number;
 };
 import {
   Dialog,
@@ -144,7 +147,7 @@ const page = () => {
   };
 
   return (
-    <div className="bg-[#f4f4f5] w-screen h-screen p-6">
+    <div className="bg-[#f4f4f5] w-screen  p-6">
       <div className="p-6  w-full m-auto  flex flex-col gap-[24px] ">
         <div className="flex flex-col bg-[#fff] p-5 rounded-xl  gap-4 ">
           <p className="text-[20px] font-bold tracking-[-0.5px]">

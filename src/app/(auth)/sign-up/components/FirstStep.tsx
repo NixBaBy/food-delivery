@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ChevronLeft } from "lucide-react";
-import React, { Dispatch } from "react";
+import React, { Dispatch, useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -15,10 +15,19 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
+type user = {
+  email: string;
+  password: string;
+};
+
 const FirstStep = ({
   setCurrentStep,
   currentStep,
+  user,
+  setUser,
 }: {
+  setUser: Dispatch<string>;
+  user: string;
   setCurrentStep: Dispatch<number>;
   currentStep: number;
 }) => {
@@ -33,7 +42,8 @@ const FirstStep = ({
     },
   });
 
-  function onSubmit() {
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    setUser(values.email);
     setCurrentStep(currentStep + 1);
   }
 
