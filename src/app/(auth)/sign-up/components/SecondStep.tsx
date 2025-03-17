@@ -27,7 +27,7 @@ const SecondStep = ({
 }) => {
   const createUser = async (password: string, user: string) => {
     try {
-      const response = await fetch("http://localhost:8080/sign-up", {
+      const response = await fetch("http://localhost:8080/auth/sign-up", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -17,6 +17,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useRouter } from "next/navigation";
 
 const FormSchema = z.object({
   email: z.string().min(2, {
@@ -34,10 +35,30 @@ const FormSchema = z.object({
     .refine((password) => /[0-9]/.test(password), {
       message: "Password must include at least one number.",
     }),
-  confirm: z.string(),
 });
 
 const Page = () => {
+  const router = useRouter();
+
+  const loginUser = async (user: string, password: string) => {
+    const response = await fetch("http://localhost:8080/auth/sign-in", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ user, password }),
+    });
+    const data = await response.json();
+    console.log(data);
+    if (data.error) {
+      alert(data.message);
+    } else if (data.user.role == "ADMIN") {
+      router.push("/foodMenu");
+    } else {
+      router.push("/");
+    }
+  };
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -47,7 +68,7 @@ const Page = () => {
   });
 
   function onSubmit(values: z.infer<typeof FormSchema>) {
-    alert("amjilttai uildel hiigdlee");
+    loginUser(values.email, values.password);
   }
 
   return (
@@ -77,8 +98,6 @@ const Page = () => {
               </FormItem>
             )}
           />
-        </form>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormField
             control={form.control}
             name="password"
