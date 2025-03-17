@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState } from "react";
-import CloudinaryUpload from "../CloudinaryUpload";
+
 import {
   Dialog,
   DialogContent,
@@ -19,9 +19,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { handleUpload } from "@/lib/handle-upload";
 
 const FormSchema = z.object({
-  img: z.string().min(0, {
+  img: z.string().nonempty({
     message: "zurag oruulna uu",
   }),
   foodName: z.string().min(2, {
@@ -48,17 +49,19 @@ const FoodsDialog = ({ getData, id }: { getData: () => void; id: string }) => {
       setFile(files);
       const tempImageUrl = URL.createObjectURL(files);
       setImage(tempImageUrl);
+      form.setValue("img", "uploaded");
     }
   };
 
   const createFood = async (values: z.infer<typeof FormSchema>) => {
+    const imgUrl = await handleUpload(file);
     try {
       const response = await fetch("http://localhost:8080/foods", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...values, category: id }),
+        body: JSON.stringify({ ...values, category: id, image: imgUrl }),
       });
       console.log(response);
     } catch (error) {
@@ -182,10 +185,23 @@ const FoodsDialog = ({ getData, id }: { getData: () => void; id: string }) => {
                     <FormItem>
                       <FormLabel>Food image</FormLabel>
                       <FormControl>
-                        <CloudinaryUpload
-                          handleFile={handleFile}
-                          field={field}
-                        />
+                        <div className="flex flex-col gap-2">
+                          <Input
+                            placeholder="image"
+                            type="file"
+                            onChange={handleFile}
+                            {...rest}
+                          />
+                          {image && (
+                            <div className="border">
+                              <img
+                                className="size-48 object-cover"
+                                src={image}
+                                alt="zurag"
+                              />
+                            </div>
+                          )}
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
