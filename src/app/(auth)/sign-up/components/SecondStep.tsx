@@ -34,7 +34,6 @@ const SecondStep = ({
         },
         body: JSON.stringify({ user, password }),
       });
-      console.log(response);
     } catch (error) {
       console.log("error", error);
       alert("aldaa garlaa");

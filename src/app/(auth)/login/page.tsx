@@ -37,10 +37,11 @@ const FormSchema = z.object({
     }),
 });
 
-const Page = () => {
+const Page = ({ user }: { user: string }) => {
   const router = useRouter();
 
   const loginUser = async (user: string, password: string) => {
+    localStorage.setItem("email", user);
     const response = await fetch("http://localhost:8080/auth/sign-in", {
       method: "POST",
       headers: {
@@ -50,6 +51,7 @@ const Page = () => {
     });
     const data = await response.json();
     console.log(data);
+    localStorage.setItem("id", data.user._id);
     if (data.error) {
       alert(data.message);
     } else if (data.user.role == "ADMIN") {
@@ -104,7 +106,11 @@ const Page = () => {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input placeholder="Enter your password" {...field} />
+                  <Input
+                    placeholder="Enter your password"
+                    {...field}
+                    type="password"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

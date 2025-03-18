@@ -72,7 +72,7 @@ const Foods = () => {
                               +
                             </div>
                           </DialogTrigger>
-                          <DialogContent className="">
+                          <DialogContent className="w-[826px]">
                             <DialogHeader>
                               <DialogTitle className="text-red-500 text-xl font-bold"></DialogTitle>
                               <div className="text-sm text-muted-foreground flex gap-6">
