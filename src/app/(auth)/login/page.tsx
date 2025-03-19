@@ -11,10 +11,8 @@ import { z } from "zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { useRouter } from "next/navigation";
@@ -116,7 +114,12 @@ const Page = ({ user }: { user: string }) => {
               </FormItem>
             )}
           />
-          <p>Forgat Password?</p>
+          <a
+            href="reset-password-request"
+            className="font-[14px] text-[#18181B]"
+          >
+            Forgat Password?
+          </a>
           <Button type="submit" className="w-full">
             Lets go
           </Button>
