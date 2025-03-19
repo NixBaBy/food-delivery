@@ -48,8 +48,10 @@ const Page = ({ user }: { user: string }) => {
       body: JSON.stringify({ user, password }),
     });
     const data = await response.json();
-    console.log(data);
-    localStorage.setItem("id", data.user._id);
+    console.log(data.error);
+    if (!data.error) {
+      localStorage.setItem("id", data.user._id);
+    }
     if (data.error) {
       alert(data.message);
     } else if (data.user.role == "ADMIN") {
