@@ -31,75 +31,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { CategoryType } from "@/app/util/types";
+import { useFood } from "@/app/_context/FoodContext";
 
-type Category = {
-  _id: string;
-  categoryName: string;
-  createdAt: Date;
-  updatedAt: Date;
-  __v: number;
-};
-type Food = {
-  foodName: string;
-  price: number;
-  image: string;
-  ingredients: string;
-  category?: Category;
-  _id?: string | any;
-};
-
-const Foods = ({ categories }: { categories: Category[] }) => {
-  const [foods, setFoods] = useState<Food[]>([]);
+const Foods = ({ categories }: { categories: CategoryType[] }) => {
   const [foodId, setFoodId] = useState<string>("");
 
-  const getData = async () => {
-    const res = await fetch(`http://localhost:8080/foods`);
-    const data = await res.json();
-    setFoods(data.newFood);
-  };
-  useEffect(() => {
-    getData();
-  }, []);
-
-  const deleteFood = async (foodId: string) => {
-    try {
-      const response = await fetch(`http://localhost:8080/foods/${foodId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      console.log(response);
-    } catch (error) {
-      console.log("error", error);
-      alert("aldaa garlaa");
-    }
-    alert("amjilttai ustglaa");
-    getData();
-  };
-
-  const editCategory = async (
-    ingredients: string,
-    foodName: string,
-    price: string,
-    category: string,
-    foodId: string
-  ) => {
-    try {
-      const response = await fetch(`http://localhost:8080/foods/${foodId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ingredients, foodName, price, category }),
-      });
-      console.log(response);
-    } catch (error) {
-      console.log("error", error);
-      alert("aldaa garlaa");
-    }
-    getData();
-  };
+  const { foods, deleteFood, editFood, getData } = useFood();
 
   const FormSchema = z.object({
     foodName: z.string().min(2, {
@@ -128,7 +66,7 @@ const Foods = ({ categories }: { categories: Category[] }) => {
 
   function onSubmit(values: z.infer<typeof FormSchema>) {
     console.log("food!+", foodId);
-    editCategory(
+    editFood(
       values.Ingredients,
       values.foodName,
       values.foodPrice,

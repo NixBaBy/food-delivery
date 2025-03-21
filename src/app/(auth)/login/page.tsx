@@ -15,7 +15,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { useRouter } from "next/navigation";
+import { useUser } from "@/app/_context/UsersContext";
 
 const FormSchema = z.object({
   email: z.string().min(2, {
@@ -35,31 +35,8 @@ const FormSchema = z.object({
     }),
 });
 
-const Page = ({ user }: { user: string }) => {
-  const router = useRouter();
-
-  const loginUser = async (user: string, password: string) => {
-    localStorage.setItem("email", user);
-    const response = await fetch("http://localhost:8080/auth/sign-in", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ user, password }),
-    });
-    const data = await response.json();
-    console.log(data.error);
-    if (!data.error) {
-      localStorage.setItem("id", data.user._id);
-    }
-    if (data.error) {
-      alert(data.message);
-    } else if (data.user.role == "ADMIN") {
-      router.push("/foodMenu");
-    } else {
-      router.push("/");
-    }
-  };
+const Page = () => {
+  const { loginUser } = useUser();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),

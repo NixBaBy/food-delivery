@@ -9,23 +9,10 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-
-type Category = {
-  _id: number;
-  categoryName: string;
-};
+import { useCategory } from "@/app/_context/CategoryContext";
 
 const Categorys = () => {
-  const [categories, setCategories] = useState<Category[]>([]);
-
-  useEffect(() => {
-    const getData = async () => {
-      const res = await fetch(`http://localhost:8080/food-category`);
-      const data = await res.json();
-      setCategories(data.getCagegory);
-    };
-    getData();
-  }, []);
+  const { categories } = useCategory();
 
   return (
     <div className="max-w-[1440px] m-auto">

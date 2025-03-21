@@ -5,14 +5,11 @@ type Category = {
   updatedAt: Date;
   __v: number;
 };
-type Food = {
-  foodName: string;
-  price: number;
-  image: string;
-  ingredients: string;
-  category?: Category;
-  _id?: string | any;
-};
+
+import { useCategory } from "@/app/_context/CategoryContext";
+import { useFood } from "@/app/_context/FoodContext";
+import { useFoodOrder } from "@/app/_context/OrderContext";
+import { FoodType } from "@/app/util/types";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -23,25 +20,22 @@ import {
 } from "@/components/ui/dialog";
 import { useEffect, useState } from "react";
 const Foods = () => {
-  const [foods, setFoods] = useState<Food[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  useEffect(() => {
-    const getData = async () => {
-      const res = await fetch(`http://localhost:8080/foods`);
-      const data = await res.json();
-      setFoods(data.newFood);
-    };
-    getData();
-  }, []);
+  const { categories } = useCategory();
+  const { foods } = useFood();
+  const [count, setCount] = useState(1);
+  const { handleBasket } = useFoodOrder();
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
-  useEffect(() => {
-    const getData = async () => {
-      const res = await fetch(`http://localhost:8080/food-category`);
-      const data = await res.json();
-      setCategories(data.getCagegory);
-    };
-    getData();
-  }, []);
+  const plusHandler = () => {
+    setCount(count + 1);
+  };
+
+  const minusHandler = () => {
+    setCount((prevCount) => Math.max(prevCount - 1, 0));
+  };
+  const handleAddCart = (food: FoodType) => {
+    handleBasket({ food, count });
+  };
 
   return (
     <div>
@@ -66,7 +60,7 @@ const Foods = () => {
                         }}
                         className="bg-cover bg-center w-[365px] h-[210px] rounded-xl relative"
                       >
-                        <Dialog>
+                        <Dialog onOpenChange={(val) => setOpenModal(val)}>
                           <DialogTrigger>
                             <div className="w-[44px] h-[44px] py-2 px-4 justify-center items-center text-red-500 rounded-full bg-[#FFF] absolute bottom-5 right-5">
                               +
@@ -96,22 +90,33 @@ const Foods = () => {
                                           Total Price
                                         </p>
                                         <p className="text-[24px] font-bold tracking-[-0.6px] text-[#09090B]">
-                                          ${filteredFood.price}
+                                          ${filteredFood.price * count}
                                         </p>
                                       </div>
                                       <div className="flex items-center gap-3">
-                                        <div className="w-[44px] h-[44px] rounded-full py-2 px-4 flex items-center justify-center border-[1px] border-solid border-[#E4E4E7]">
+                                        <Button
+                                          className="w-[44px] h-[44px] rounded-full py-2 px-4 flex items-center justify-center border-[1px] border-solid border-[#E4E4E7] bg-background text-black"
+                                          onClick={minusHandler}
+                                        >
                                           -
-                                        </div>
+                                        </Button>
                                         <p className="text-[#09090B] text-[18px] font-bold">
-                                          1
+                                          {count}
                                         </p>
-                                        <div className="w-[44px] h-[44px] rounded-full py-2 px-4 flex items-center justify-center border-[1px] border-solid border-[#E4E4E7]">
+                                        <Button
+                                          className="w-[44px] h-[44px] rounded-full py-2 px-4 flex items-center justify-center border-[1px] border-solid border-[#E4E4E7] bg-background text-black"
+                                          onClick={plusHandler}
+                                        >
                                           +
-                                        </div>
+                                        </Button>
                                       </div>
                                     </div>
-                                    <Button className="w-full">
+                                    <Button
+                                      className="w-full"
+                                      onClick={() =>
+                                        handleAddCart(filteredFood)
+                                      }
+                                    >
                                       Add to cart
                                     </Button>
                                   </div>

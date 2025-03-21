@@ -1,12 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-type Category = {
-  _id: string;
-  categoryName: string;
-  createdAt: Date;
-  updatedAt: Date;
-  __v: number;
-};
 import {
   Dialog,
   DialogContent,
@@ -38,6 +31,8 @@ import {
 import Foods from "../components/Foods/AddFoods";
 
 import { Input } from "@/components/ui/input";
+import { useCategory } from "@/app/_context/CategoryContext";
+import { CategoryType } from "@/app/util/types";
 
 const FormSchema = z.object({
   category: z.string().min(2, {
@@ -46,7 +41,9 @@ const FormSchema = z.object({
 });
 
 const page = () => {
-  const [categories, setCategories] = useState<Category[]>([]);
+  const { categories, createCategory, deleteCategory, editCategory } =
+    useCategory();
+
   const [editCategoryName, setEditCategoryName] = useState<boolean>(false);
   const [isedit, setIsEdit] = useState<boolean>(false);
   const [saveId, setSaveId] = useState<string>("");
@@ -57,72 +54,6 @@ const page = () => {
       category: "",
     },
   });
-
-  const getData = async () => {
-    const res = await fetch(`http://localhost:8080/food-category`);
-    const data = await res.json();
-    setCategories(data.getCagegory);
-  };
-  useEffect(() => {
-    getData();
-  }, []);
-
-  const createCategory = async (name: string) => {
-    try {
-      const response = await fetch("http://localhost:8080/food-category", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ categoryName: name }),
-      });
-      console.log(response);
-    } catch (error) {
-      console.log("error", error);
-      alert("aldaa garlaa");
-    }
-    getData();
-  };
-
-  const deleteCategory = async (category: string) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8080/food-category/${category}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      console.log(response);
-    } catch (error) {
-      console.log("error", error);
-      alert("aldaa garlaa");
-    }
-    alert("amjilttai ustglaa");
-    getData();
-  };
-
-  const editCategory = async (id: string, categoryName: string) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8080/food-category/${id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ categoryName }),
-        }
-      );
-      console.log(response);
-    } catch (error) {
-      console.log("error", error);
-      alert("aldaa garlaa");
-    }
-    getData();
-  };
 
   function onSubmit(values: z.infer<typeof FormSchema>) {
     if (isedit) {
@@ -154,7 +85,7 @@ const page = () => {
             Dishes category
           </p>
           <div className="flex gap-3 items-center flex-wrap ">
-            {categories?.map((category: Category) => {
+            {categories?.map((category: CategoryType) => {
               return (
                 <button
                   key={category._id}
