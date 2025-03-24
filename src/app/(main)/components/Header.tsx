@@ -38,6 +38,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useUser } from "@/app/_context/UsersContext";
+import OrderCart from "./OrderCart";
 
 const Header = () => {
   const { user } = useUser();
@@ -155,7 +156,9 @@ const Header = () => {
                       </TabsTrigger>
                     </TabsList>
                     <TabsContent value="cart" className="text-background">
-                      <div className="w-[439px] h-[508px] p-4 rounded-[20px] "></div>
+                      <div className="w-[439px] h-[508px] p-4 rounded-[20px] ">
+                        <OrderCart />
+                      </div>
                     </TabsContent>
                     <TabsContent value="order" className="text-background">
                       Change your password here.

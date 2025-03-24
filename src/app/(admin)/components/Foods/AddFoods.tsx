@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import FoodsDialog from "./FoodsDialog";
 import { Pencil, Trash2 } from "lucide-react";
 import {

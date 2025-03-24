@@ -18,7 +18,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 const SecondStep = ({
   setCurrentStep,
   currentStep,
-  user,
 }: {
   setUser: Dispatch<string>;
   user: string;
@@ -48,7 +47,6 @@ const SecondStep = ({
     }
   };
 
-  const router = useRouter();
   const formSchema = z
     .object({
       password: z

@@ -18,9 +18,7 @@ const SecondStep = ({
   setCurrentStep,
   currentStep,
   user,
-  setUser,
 }: {
-  setUser: Dispatch<string>;
   user: string;
   setCurrentStep: any;
   currentStep: number;
