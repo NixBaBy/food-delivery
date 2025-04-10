@@ -26,13 +26,16 @@ const OrderProvider = ({ children }: { children: ReactNode }) => {
 
   const createOrder = async () => {
     try {
-      const response = await fetch("http://localhost:8080/food-order", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ basket }),
-      });
+      const response = await fetch(
+        "https://food-deliveryservice.onrender.com/food-order",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ basket }),
+        }
+      );
       console.log(response);
     } catch (error) {
       console.log("error", error);

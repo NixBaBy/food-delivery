@@ -8,7 +8,9 @@ const Categorys = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   useEffect(() => {
     const getData = async () => {
-      const res = await fetch(`http://localhost:8080/api/categories`);
+      const res = await fetch(
+        `https://food-deliveryservice.onrender.com/api/categories`
+      );
       const data = await res.json();
       setCategories(data);
     };

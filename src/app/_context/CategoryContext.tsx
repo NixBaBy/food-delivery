@@ -28,20 +28,25 @@ const CategoryProvider = ({ children }: { children: ReactNode }) => {
   const [categories, setCategories] = useState<CategoryType[]>([]);
 
   const getData = async () => {
-    const res = await fetch(`http://localhost:8080/food-category`);
+    const res = await fetch(
+      `https://food-deliveryservice.onrender.com/food-category`
+    );
     const data = await res.json();
     setCategories(data.getCagegory);
   };
 
   const createCategory = async (name: string) => {
     try {
-      const response = await fetch("http://localhost:8080/food-category", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ categoryName: name }),
-      });
+      const response = await fetch(
+        "https://food-deliveryservice.onrender.com/food-category",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ categoryName: name }),
+        }
+      );
       console.log(response);
     } catch (error) {
       console.log("error", error);
@@ -53,7 +58,7 @@ const CategoryProvider = ({ children }: { children: ReactNode }) => {
   const deleteCategory = async (category: string) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/food-category/${category}`,
+        `https://food-deliveryservice.onrender.com/food-category/${category}`,
         {
           method: "DELETE",
           headers: {
@@ -73,7 +78,7 @@ const CategoryProvider = ({ children }: { children: ReactNode }) => {
   const editCategory = async (id: string, categoryName: string) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/food-category/${id}`,
+        `https://food-deliveryservice.onrender.com/food-category/${id}`,
         {
           method: "PUT",
           headers: {

@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ChevronLeft } from "lucide-react";
-import React, { Dispatch } from "react";
+import React from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -15,22 +15,15 @@ import {
 } from "@/components/ui/form";
 import { useRouter, useSearchParams } from "next/navigation";
 
-const SecondStep = ({
-  setCurrentStep,
-  currentStep,
-}: {
-  setUser: Dispatch<string>;
-  user: string;
-  setCurrentStep: any;
-  currentStep: number;
-}) => {
+const ResetPassword = () => {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
+  const router = useRouter();
 
   const resetPassword = async (password: string) => {
     try {
-      const response = await fetch(
-        "http://localhost:8080/auth/reset-password",
+      await fetch(
+        "https://food-deliveryservice.onrender.com/auth/reset-password",
         {
           method: "POST",
           headers: {
@@ -51,20 +44,20 @@ const SecondStep = ({
     .object({
       password: z
         .string()
-        .min(8, { message: "Password must be at least 8 characters long." })
+        .min(8, { message: "Нууц үг нь дор хаяж 8 тэмдэгт байх ёстой." })
         .refine((password) => /[A-Z]/.test(password), {
-          message: "Password must include at least one uppercase letter.",
+          message: "Нууц үг нь том үсэг агуулсан байх ёстой.",
         })
         .refine((password) => /[a-z]/.test(password), {
-          message: "Password must include at least one lowercase letter.",
+          message: "Нууц үг нь жижиг үсэг агуулсан байх ёстой.",
         })
         .refine((password) => /[0-9]/.test(password), {
-          message: "Password must include at least one number.",
+          message: "Нууц үг нь тоо агуулсан байх ёстой.",
         }),
       confirm: z.string(),
     })
     .refine((data) => data.password === data.confirm, {
-      message: "Passwords do not match.",
+      message: "Нууц үг таарахгүй байна.",
       path: ["confirm"],
     });
 
@@ -79,23 +72,22 @@ const SecondStep = ({
   function onSubmit(values: z.infer<typeof formSchema>) {
     resetPassword(values.password);
   }
+  const buttonHandler = () => {
+    router.push("/login");
+  };
 
   return (
     <div className="flex flex-col gap-6 w-[480px]">
-      <Button
-        size="icon"
-        variant="outline"
-        onClick={() => setCurrentStep(currentStep - 1)}
-      >
+      <Button size="icon" variant="outline" onClick={buttonHandler}>
         <ChevronLeft color="#18181B" />
       </Button>
       <div>
         <p className="text-[#09090B] text-[24px] font-bold tracking-[-0.6px]">
-          Create new password
+          Шинэ нууц үг үүсгэх
         </p>
         <p className="text-[#71717A] text-[16px]">
-          Set a new password with a combination of letters and numbers for
-          better security.
+          Илүү аюулгүй байдлын тулд үсэг болон тоог хослуулсан шинэ нууц үг
+          үүсгэнэ үү.
         </p>
       </div>
       <Form {...form}>
@@ -106,7 +98,7 @@ const SecondStep = ({
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input placeholder="password" {...field} type="password" />
+                  <Input placeholder="Нууц үг" {...field} type="password" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -118,14 +110,18 @@ const SecondStep = ({
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input placeholder="confirm" {...field} type="password" />
+                  <Input
+                    placeholder="Нууц үгийг баталгаажуулах"
+                    {...field}
+                    type="password"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
           <Button type="submit" className="w-full">
-            Submit
+            Илгээх
           </Button>
         </form>
       </Form>
@@ -133,4 +129,4 @@ const SecondStep = ({
   );
 };
 
-export default SecondStep;
+export default ResetPassword;

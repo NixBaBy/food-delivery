@@ -34,19 +34,22 @@ const FoodProvider = ({ children }: { children: ReactNode }) => {
   const [foods, setFoods] = useState<FoodType[]>([]);
 
   const getData = async () => {
-    const res = await fetch(`http://localhost:8080/foods`);
+    const res = await fetch(`https://food-deliveryservice.onrender.com/foods`);
     const data = await res.json();
     setFoods(data.newFood);
   };
 
   const deleteFood = async (foodId: string) => {
     try {
-      const response = await fetch(`http://localhost:8080/foods/${foodId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `https://food-deliveryservice.onrender.com/foods/${foodId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       console.log(response);
     } catch (error) {
       console.log("error", error);
@@ -64,13 +67,16 @@ const FoodProvider = ({ children }: { children: ReactNode }) => {
     foodId: string
   ) => {
     try {
-      const response = await fetch(`http://localhost:8080/foods/${foodId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ingredients, foodName, price, category }),
-      });
+      const response = await fetch(
+        `https://food-deliveryservice.onrender.com/foods/${foodId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ingredients, foodName, price, category }),
+        }
+      );
       console.log(response);
     } catch (error) {
       console.log("error", error);

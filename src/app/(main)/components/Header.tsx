@@ -1,6 +1,5 @@
 "use client";
 import { ChevronRight, MapPin, ShoppingCart, User } from "lucide-react";
-import React, { useEffect, useState } from "react";
 import {
   Popover,
   PopoverContent,

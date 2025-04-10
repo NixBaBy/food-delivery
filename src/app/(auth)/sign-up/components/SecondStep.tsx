@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ChevronLeft } from "lucide-react";
-import React, { Dispatch } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -20,12 +19,12 @@ const SecondStep = ({
   user,
 }: {
   user: string;
-  setCurrentStep: any;
+  setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   currentStep: number;
 }) => {
   const createUser = async (password: string, user: string) => {
     try {
-      const response = await fetch("http://localhost:8080/auth/sign-up", {
+      await fetch("https://food-deliveryservice.onrender.com/auth/sign-up", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

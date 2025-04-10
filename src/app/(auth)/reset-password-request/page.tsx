@@ -12,7 +12,7 @@ const Page = () => {
   const resetPasswordRequest = async (email: string) => {
     try {
       const response = await fetch(
-        "http://localhost:8080/auth/reset-password-request",
+        "https://food-deliveryservice.onrender.com/auth/reset-password-request",
         {
           method: "POST",
           headers: {

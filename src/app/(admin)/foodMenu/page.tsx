@@ -40,7 +40,7 @@ const FormSchema = z.object({
   }),
 });
 
-const page = () => {
+const Page = () => {
   const { categories, createCategory, deleteCategory, editCategory } =
     useCategory();
 
@@ -161,4 +161,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

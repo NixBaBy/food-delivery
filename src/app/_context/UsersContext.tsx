@@ -26,13 +26,16 @@ const UsersProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
   const loginUser = async (user: string, password: string) => {
-    const response = await fetch("http://localhost:8080/auth/sign-in", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ user, password }),
-    });
+    const response = await fetch(
+      "https://food-deliveryservice.onrender.com/auth/sign-in",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user, password }),
+      }
+    );
     const data = await response.json();
     localStorage.setItem("user", JSON.stringify(data.user));
     if (!data.error) {

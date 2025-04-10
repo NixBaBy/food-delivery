@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { ChangeEvent, useState } from "react";
 
 import {
@@ -56,13 +57,16 @@ const FoodsDialog = ({ getData, id }: { getData: () => void; id: string }) => {
   const createFood = async (values: z.infer<typeof FormSchema>) => {
     const imgUrl = await handleUpload(file);
     try {
-      const response = await fetch("http://localhost:8080/foods", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ...values, category: id, image: imgUrl }),
-      });
+      const response = await fetch(
+        "https://food-deliveryservice.onrender.com/foods",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ...values, category: id, image: imgUrl }),
+        }
+      );
       console.log(response);
     } catch (error) {
       console.log("error", error);

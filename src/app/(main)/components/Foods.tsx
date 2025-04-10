@@ -1,11 +1,3 @@
-type Category = {
-  _id: string;
-  categoryName: string;
-  createdAt: Date;
-  updatedAt: Date;
-  __v: number;
-};
-
 import { useCategory } from "@/app/_context/CategoryContext";
 import { useFood } from "@/app/_context/FoodContext";
 import { useFoodOrder } from "@/app/_context/OrderContext";
@@ -18,13 +10,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 const Foods = () => {
   const { categories } = useCategory();
   const { foods } = useFood();
   const [count, setCount] = useState(1);
   const { handleBasket } = useFoodOrder();
-  const [openModal, setOpenModal] = useState<boolean>(false);
 
   const plusHandler = () => {
     setCount(count + 1);
@@ -60,7 +51,7 @@ const Foods = () => {
                         }}
                         className="bg-cover bg-center w-[365px] h-[210px] rounded-xl relative"
                       >
-                        <Dialog onOpenChange={(val) => setOpenModal(val)}>
+                        <Dialog>
                           <DialogTrigger>
                             <div className="w-[44px] h-[44px] py-2 px-4 justify-center items-center text-red-500 rounded-full bg-[#FFF] absolute bottom-5 right-5">
                               +
